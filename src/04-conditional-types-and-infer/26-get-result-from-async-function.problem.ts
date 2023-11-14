@@ -1,3 +1,4 @@
+import { Extends } from "ts-toolbelt/out/Any/Extends";
 import { Equal, Expect } from "../helpers/type-utils";
 
 const getServerSideProps = async () => {
@@ -10,7 +11,9 @@ const getServerSideProps = async () => {
   };
 };
 
-type InferPropsFromServerSideFunction = unknown;
+type InferPropsFromServerSideFunction<T> = T extends (...args: any) => any
+  ? ReturnType<T> extends Promise<{ props: infer TProps }> ? TProps : never
+  : never;
 
 type tests = [
   Expect<
